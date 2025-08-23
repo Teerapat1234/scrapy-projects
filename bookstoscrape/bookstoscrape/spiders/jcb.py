@@ -1,5 +1,6 @@
 import scrapy
 import json
+import re
 from scrapy_playwright.page import PageMethod
 
 class JcbSpider(scrapy.Spider):
@@ -23,12 +24,27 @@ class JcbSpider(scrapy.Spider):
             )
 
     def parse(self, response):
-        # articles = response.css("#offers-entry-wrap").getall()
-
-        # offers = response.css("p.ttl").getall()
         offers = response.css('a.article-body')
-        print("test ", offers)
+        offersString = offers.getall()
+        campaignList = []
+        urlPattern = r'(?<=href=")[^"]*'
+        categoryPattern = r'class="o-label\s+o-([^"]+)"'
 
-        # with open("jcb.json", 'w') as file:
-        #     json.dump(offers, file, indent=4)
+        offersString = offersString[1:]
+        offersString = offersString[:(len(offersString)-1) // 2]
+
+        for i in offersString:
+            urlMatch = re.findall(urlPattern, i)
+            urlMatch = "https://www.specialoffers.jcb" + urlMatch[0]
+            categoryMatch = re.findall(categoryPattern, i)[0]
+
+            campaignList.append(
+                {
+                    "url": urlMatch, 
+                    "category": categoryMatch
+                }
+            )
+
+        with open("jcb.json", 'w') as file:
+            json.dump(campaignList, file, indent=4)
         pass
