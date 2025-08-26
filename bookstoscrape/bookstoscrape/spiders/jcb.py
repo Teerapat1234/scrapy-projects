@@ -23,7 +23,7 @@ class JcbSpider(scrapy.Spider):
                 callback=self.parse,
             )
 
-    def parse(self, response):
+    async def parse(self, response):
         offers = response.css('a.article-body')
         offersString = offers.getall()
         campaignList = []
