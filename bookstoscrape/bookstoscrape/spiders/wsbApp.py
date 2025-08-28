@@ -1,40 +1,65 @@
 import os
 import scrapy
 from scrapy_playwright.page import PageMethod
+import asyncio
+from playwright.async_api import async_playwright, Playwright
 
 class RedditSpider(scrapy.Spider):
 
     # getting custom input from command line
     def __init__(self, value=None, *args, **kwargs):
         super(RedditSpider, self).__init__(*args, **kwargs)
-        self.post_title = value
+        self.post_url = value
 
     name = "wsbApp"
     allowed_domains = ["reddit.com"]
-    start_urls = ["https://www.reddit.com/r/wallstreetbets/comments/1n0hpbj/daily_discussion_thread_for_august_26_2025/"]
+    # post_urls = ["https://www.reddit.com/r/wallstreetbets/comments/1n1rdc1/daily_discussion_thread_for_august_28_2025/"]
 
     def start_requests(self):
-        if not self.post_title:
-            raise Exception("No custom post title provided.")
+        if not self.post_url:
+            raise Exception("No url value provided.")
         
         project_dir = os.getcwd() 
         image_path = os.path.join(project_dir, "wsb_report.png")
 
+        if os.path.exists(image_path):
+            os.remove(image_path)
+            self.log(f"Removed old screenshot: {image_path}")
+
         yield scrapy.Request(
-            url=self.start_urls[0],
+            url=self.post_url,
             callback=self.parse,
             meta={
                 "playwright": True,
+                "playwright_include_page": True,
                 "playwright_page_methods": [
-                    # PageMethod("locator.scroll_into_view_if_needed", selector={self.post_title}),
-                    PageMethod("wait_for_timeout", timeout=60000),
+                    #we could dynamic wait for element load but the img section of that post is entirely up to the board's continuos update.
+                    #I'd rather have this wait time until a clear 1/2 minute is not enough
+                    PageMethod("wait_for_timeout", timeout=30000),
                 ],
                 "playwright_page_screenshot": {
                     "path": image_path,
                     "full_page": True,
                 },
+                "playwright_context_kwargs": {
+                    "ignore_https_errors": True,
+                }
             }
         )
 
     async def parse(self, response):
-        self.log("Screenshot captured and saved to wsb_report.png")
+        await asyncio.sleep(5)
+
+        project_dir = os.getcwd() 
+        image_path = os.path.join(project_dir, "wsb_report.png")
+
+        page = response.meta["playwright_page"]
+        await page.screenshot(path=image_path, full_page=True)
+        await page.close()
+
+        try:
+            if response.meta.get('playwright_page_screenshot'):
+                self.log(f"Screenshot action was requested and page loaded successfully.")
+            
+        except Exception as e:
+            self.log(f"An error occurred during the screenshot process: {e}")
