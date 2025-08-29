@@ -1,6 +1,12 @@
 # Some Web-Scraping/Web-Crawling projects using python  Scrapy
 # Also consider using ScrapyAPI dashboard to cycle IP in case yours got banned.
 
+Follow this exact steps: 
+- Open env : .venv\Scripts\activate
+- install Scrapy for the basic html web scraping : pip install scrapy
+- install Playwright for the basic html web scraping : pip install scrapy-playwright
+- followed by : playwright install
+
 Scrape and Crawled data from several websites and save data in JSON, CSV, XML format using python Scrapy framework. 
 
 run command : scrapy crawl jcb 

@@ -10,7 +10,6 @@ class JcbSpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.start_urls:
-            print("test loop")
             yield scrapy.Request(
                 url,
                 meta={
