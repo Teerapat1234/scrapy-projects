@@ -1,0 +1,8 @@
+config.ini
+.venv
+*.env
+.gitignore
+pip-log.txt
+build/
+dist/
+n8n_ssh_key

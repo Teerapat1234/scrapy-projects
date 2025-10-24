@@ -17,3 +17,8 @@ We're also using Playwright to actually loads the page in instead of just the so
 
 Getting Reddit post specifically from this guy wsbApp and just capture the post.
 scrapy crawl wsbApp -a value="https://www.reddit.com/r/wallstreetbets/comments/1n1rdc1/daily_discussion_thread_for_august_28_2025/"
+
+Noted: Made to be called by an N8N container through an ssh node. This implements ssh keybased-authen
+The keys are manually created and had public key given to this project while another given to the container calling for this container.
+
+Build image: docker build -t scrapyProjectApiImage .

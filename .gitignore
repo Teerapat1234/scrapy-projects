@@ -2,3 +2,10 @@ wsb_report.png
 __pycache__/
 bookstorescrape/__pycache__/
 bookstorescrape/spiders/__pycache__/
+.venv
+*.env
+build/
+dist/
+n8n_ssh_key
+n8n_ssh_key.pub
+*.pyc
