@@ -45,6 +45,6 @@ class JcbSpider(scrapy.Spider):
             )
 
         print("ans:", campaignList)
-        with open("jcb.json", 'w') as file:
-            json.dump(campaignList, file, indent=4)
+        # with open("jcb.json", 'w') as file:
+        #     json.dump(campaignList, file, indent=4)
         pass

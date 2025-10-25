@@ -10,3 +10,4 @@ n8n_ssh_key
 n8n_ssh_key.pub
 *.pyc
 jcb.json
+wsb_report
