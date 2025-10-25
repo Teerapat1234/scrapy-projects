@@ -6,3 +6,5 @@ pip-log.txt
 build/
 dist/
 n8n_ssh_key
+README.md
+jcb.json

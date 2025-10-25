@@ -3,6 +3,7 @@ import scrapy
 from scrapy_playwright.page import PageMethod
 import asyncio
 from playwright.async_api import async_playwright, Playwright
+from PIL import Image
 
 class RedditSpider(scrapy.Spider):
 
@@ -55,6 +56,7 @@ class RedditSpider(scrapy.Spider):
 
         page = response.meta["playwright_page"]
         await page.screenshot(path=image_path, full_page=True)
+        self.crop_image(image_path)
         await page.close()
 
         try:
@@ -63,3 +65,20 @@ class RedditSpider(scrapy.Spider):
             
         except Exception as e:
             self.log(f"An error occurred during the screenshot process: {e}")
+
+    def crop_image(self, image_path):
+        try:
+            img = Image.open(image_path)
+            #left, top, right, bottom
+            crop_box = (280, 152, 934, 809)
+            cropped_img = img.crop(crop_box)
+
+            os.remove(image_path)
+            #Pillow will infer the format from the extension
+            cropped_img.save(image_path)
+            print(f"Image successfully cropped and saved to {image_path}")
+
+        except FileNotFoundError:
+            print(f"Error: Input file not found at {image_path}")
+        except Exception as e:
+            print(f"An error occurred: {e}")

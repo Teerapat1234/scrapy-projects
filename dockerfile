@@ -1,5 +1,18 @@
 FROM python:3.13.2-slim
 
+# Install system libraries required by the browser (Playwright dependency)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libgbm1 \
+    libnss3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libasound2 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Define the non-root user that n8n will use
 ENV SSH_USER=n8n_user
 ENV SSH_HOME=/home/$SSH_USER
@@ -42,6 +55,8 @@ RUN mkdir -p /app/scripts
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN playwright install-deps
+RUN playwright install
 COPY . /app
 
 RUN echo '#!/usr/bin/env python3\nimport sys\nprint(f"Hello from Python: {sys.argv[1]}")' > /app/scripts/test.py

@@ -1,16 +1,17 @@
 services:
   # Your custom Python SSH container setup
-  scrapy-project-api:
+  scrapy-api:
     build:
       context: ./
       dockerfile: dockerfile
-    image: scrapy-project-api-image:latest 
-    container_name: scrapy-project-api
+    image: scrapy-api-image:latest 
+    container_name: scrapy-api
+    mem_limit: 4g
     tty: true
     stdin_open: true
     restart: unless-stopped
     ports:
-      - "2222:22" # Host port: 2222, Container port: 22
+      - "2223:22" # Host port: 2223, Container port: 22
     networks:
       - internal_network
 
