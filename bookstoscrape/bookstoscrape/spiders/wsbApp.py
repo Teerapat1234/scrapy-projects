@@ -25,7 +25,6 @@ class RedditSpider(scrapy.Spider):
 
         if os.path.exists(image_path):
             os.remove(image_path)
-            self.log(f"Removed old screenshot: {image_path}")
 
         yield scrapy.Request(
             url=self.post_url,

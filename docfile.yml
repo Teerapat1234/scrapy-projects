@@ -40,6 +40,7 @@ ENV SSH_HOME=/home/$SSH_USER
 USER root
 
 # 2. Setup SSH configuration for key-based authentication
+# Create the SSH server directory and host keys
 RUN mkdir -p /var/run/sshd && \
     ssh-keygen -A && \
     useradd -m -s /bin/bash ${SSH_USER} && \
@@ -48,7 +49,6 @@ RUN mkdir -p /var/run/sshd && \
     mkdir -p $SSH_HOME/.ssh && \
     chown -R $SSH_USER:$SSH_USER $SSH_HOME && \
     echo "export PLAYWRIGHT_BROWSERS_PATH=/usr/local/lib/ms-playwright-browsers" >> $SSH_HOME/.bashrc && \
-    echo "PLAYWRIGHT_BROWSERS_PATH=/usr/local/lib/ms-playwright-browsers" >> /etc/environment && \
     chown $SSH_USER:$SSH_USER $SSH_HOME/.bashrc
 
 # *IMPORTANT Copy the public key for authorized access

@@ -1,6 +1,11 @@
+__pycache__/
+bookstorescrape/__pycache__/
+bookstorescrape/spiders/__pycache__/
 config.ini
 .venv
 *.env
+.git
+.DS_Store
 .gitignore
 pip-log.txt
 build/
@@ -8,4 +13,6 @@ dist/
 n8n_ssh_key
 README.md
 jcb.json
-wsb_report
+wsb_report.png
+log
+logs/

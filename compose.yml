@@ -6,7 +6,6 @@ services:
       dockerfile: dockerfile
     image: scrapy-api-image:latest 
     container_name: scrapy-api
-    mem_limit: 4g
     tty: true
     stdin_open: true
     restart: unless-stopped
