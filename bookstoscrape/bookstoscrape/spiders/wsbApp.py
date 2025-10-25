@@ -57,14 +57,14 @@ class RedditSpider(scrapy.Spider):
         page = response.meta["playwright_page"]
         await page.screenshot(path=image_path, full_page=True)
         self.crop_image(image_path)
-        await page.close()
 
         try:
             if response.meta.get('playwright_page_screenshot'):
-                self.log(f"Screenshot action was requested and page loaded successfully.")
-            
+                self.log(f"Screenshot action was requested and page loaded successfully.")  
         except Exception as e:
             self.log(f"An error occurred during the screenshot process: {e}")
+        finally:
+            await page.close()
 
     def crop_image(self, image_path):
         try:
